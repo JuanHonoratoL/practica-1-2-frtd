@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Héroes de México | Gestión de Personajes Históricos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="topbar__marca">
+            <img class="topbar__escudo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Escudo_de_la_Segunda_Rep%C3%BAblica_Federal_de_los_Estados_Unidos_Mexicanos.svg/500px-Escudo_de_la_Segunda_Rep%C3%BAblica_Federal_de_los_Estados_Unidos_Mexicanos.svg.png" alt="Escudo de México">
+            <div>
+                <h1>Héroes de México</h1>
+                <p>Gestión de personajes históricos</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <form class="toolbar" id="form-busqueda">
+            <div class="toolbar__filtro">
+                <select id="filtro-epoca" name="filtro-epoca">
+                    <option value="">Época</option>
+                </select>
+                <div class="chips" id="chips-epoca"></div>
+            </div>
+
+            <div class="toolbar__filtro">
+                <select id="filtro-movimiento" name="filtro-movimiento">
+                    <option value="">Movimiento</option>
+                </select>
+                <div class="chips" id="chips-movimiento"></div>
+            </div>
+
+            <select id="filtro-estado" name="filtro-estado">
+                <option value="">Estado de nacimiento</option>
+            </select>
+
+            <button type="submit" class="btn btn--ghost">Buscar</button>
+            <button type="reset" class="btn btn--ghost">Limpiar</button>
+
+            <button type="button" class="btn btn--primary" id="btn-nuevo-heroe">+ Registrar héroe</button>
+        </form>
+
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Fecha de nacimiento</th>
+                        <th>Estado de nacimiento</th>
+                        <th>Epoca</th>
+                        <th>Movimiento</th>
+                        <th>Descripción</th>
+                        <th class="table__actions-col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-heroes"></tbody>
+            </table>
+
+           <!-- <p class="table-empty" id="tabla-vacia">No hay héroes registrados.</p> -->
+            <div class="paginacion" id="tabla-vacia">
+                <button id="btn-anterior" class="btn btn--ghost" disabled>&larr; Anterior</button>
+                <span id="info-pagina"></span>
+                <button id="btn-siguiente" class="btn btn--ghost" disabled>Siguiente &rarr;</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Registrar / Modificar héroe -->
+    <dialog id="modal-heroe" class="modal" aria-labelledby="modal-heroe-title">
+        <form method="dialog" class="modal__form">
+            <input type="hidden" id="input-id" name="id">
+            <header class="modal__header">
+                <h2 id="modal-heroe-title">Registrar héroe</h2>
+                <button type="button" class="modal__close" aria-label="Cerrar">&times;</button>
+            </header>
+
+            <div class="modal__body">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="input-nombre">Nombre *</label>
+                        <input id="input-nombre" name="nombre" type="text" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="input-apellido">Apellido *</label>
+                        <input id="input-apellido" name="apellido" type="text" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="input-fecha">Fecha de nacimiento *</label>
+                        <input id="input-fecha" name="fechaNacimiento" type="date" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="input-estado">Estado de nacimiento *</label>
+                        <input id="input-estado" name="estadoNacimiento" type="text" list="lista-estados-datalist" placeholder="Ej. Guanajuato" required>
+                        <datalist id="lista-estados-datalist"></datalist>
+                    </div>
+                    <div class="form-field">
+                        <label for="input-epoca">Época histórica *</label>
+                        <input id="input-epoca" name="epoca" type="text" list="lista-epocas-datalist" placeholder="Ej. Virreinato de Nueva España, Primer Imperio Mexicano" required>
+                        <datalist id="lista-epocas-datalist"></datalist>
+                    </div>
+                    <div class="form-field">
+                        <label for="input-movimiento">Movimiento *</label>
+                        <input id="input-movimiento" name="movimiento" type="text" placeholder="Ej. Guerra de Reforma, Intervención Francesa" required>
+                    </div>
+                    <div class="form-field form-field--full">
+                        <label for="input-descripcion">Descripción</label>
+                        <textarea id="input-descripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="modal__footer">
+                <button type="button" class="btn btn--ghost" data-close-modal>Cancelar</button>
+                <button type="submit" class="btn btn--primary">Guardar héroe</button>
+            </footer>
+        </form>
+    </dialog>
+
+    <!-- Modal: Confirmar eliminación -->
+    <dialog id="modal-eliminar" class="modal modal--sm" aria-labelledby="modal-eliminar-title">
+        <div class="modal__form">
+            <header class="modal__header">
+                <h2 id="modal-eliminar-title">Eliminar héroe</h2>
+                <button type="button" class="modal__close" aria-label="Cerrar">&times;</button>
+            </header>
+            <div class="modal__body">
+                <p>¿Seguro que deseas eliminar este héroe? Esta acción no se puede deshacer.</p>
+            </div>
+            <footer class="modal__footer">
+                <button type="button" class="btn btn--ghost" data-close-modal>Cancelar</button>
+                <button type="button" class="btn btn--danger">Eliminar</button>
+            </footer>
+        </div>
+    </dialog>
+
+    <div class="toast-container" aria-live="polite"></div>
+
+    <script src="script_listado.js"></script>
+    <script src="script_modales.js"></script>
+    <script src="script_guardar.js"></script>
+</body>
+
+</html>
