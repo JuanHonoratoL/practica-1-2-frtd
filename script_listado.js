@@ -182,7 +182,7 @@ async function buscarHeroes() {
     }
     if (movimientosSeleccionadas.length > 0) {
       resultadosPorTipo.push(
-        obtenerUnion(valor => `${API_URL}/movimiento?movimiento=${encodeURIComponent(valor)}`, movimientosSeleccionadas)
+        obtenerUnion(valor => `${API_URL}/movimiento/${encodeURIComponent(valor)}`, movimientosSeleccionadas)
       );
     }
     if (estado) {
